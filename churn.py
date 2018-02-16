@@ -15,30 +15,20 @@ import numpy as np
 
 # Load dataset
 dataset = pandas.read_csv("churn-bigml-802.csv")
+array = dataset.values
+X = array[:,1:18]
+Y = array[:,19]
+dataset2 = pandas.read_csv("churn-bigml-201.csv")
+array = dataset2.values
+X2 = array[:,1:18]
+Y2 = array[:,19]
+
 dataset.plot(kind='box', subplots=True, layout=(5,4), sharex=False, sharey=False)
 plt.show()
-
-
 # histograms
 dataset.hist()
 plt.show()
 
-print(dataset.shape)
-array = dataset.values
-print(array.dtype)
-X = array[:,1:18]
-Y = array[:,19]
-#X=np.delete(X,2,1)
-#X=np.delete(X,2,1)
-dataset2 = pandas.read_csv("churn-bigml-201.csv")
-
-print(dataset2.shape)
-array = dataset2.values
-print(type(array))
-X2 = array[:,1:18]
-Y2 = array[:,19]
-#X2=np.delete(X2,2,1)
-#X2=np.delete(X2,2,1)
 #Creating training data and testing data
 X_train=X
 Y_train=Y
@@ -48,10 +38,6 @@ X_train=X.astype(float)
 Y_train=Y.astype(int)
 X_validation=X2.astype(float)
 Y_validation=Y2.astype(int)
-print(X_train)
-print(Y_train)
-print(X_train.dtype)
-print(Y_train.dtype)
 
 seed=7
 scoring = 'accuracy'
@@ -83,10 +69,13 @@ ax = fig.add_subplot(111)
 plt.boxplot(results)
 ax.set_xticklabels(names)
 plt.show()
+
 # Make predictions on validation dataset
 knn = KNeighborsClassifier()
 knn.fit(X_train, Y_train)
 predictions = knn.predict(X_validation)
-print(accuracy_score(Y_validation, predictions))
+
+#Confusion Matrix
 print(confusion_matrix(Y_validation, predictions))
+
 print(classification_report(Y_validation, predictions))
